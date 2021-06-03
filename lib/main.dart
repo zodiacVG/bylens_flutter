@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:bylens/network/populat_movie_request.dart';
 import 'package:bylens/model/popular_model.dart';
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(MyApp());
@@ -61,14 +63,6 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void getMoviePopularList(page) {
-    print('开始调用');
-    popularRequest.getMoviePopularList(page).then((result) {
-      print('调用完了 看看结果');
-      print(result);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,7 +87,29 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () async {
           print('电解铝');
           afterTap();
-          getMoviePopularList(1);
+          var result;
+          print('开始');
+          // 1.拼接URL
+          final url = "https://api.themoviedb.org/3/movie/popular?api_key=3c4cb870e3f3c729ef1eb2d0538ba4f7&language=en-US?page=1";
+          // 2.发送请求
+          try{
+            var response = await http.get(Uri.parse(url),headers: {"Accept": "application/json"});
+            print(response);
+            if (response.statusCode == 200) {
+              print('代码ok');
+              var json = convert.jsonDecode(response.body) as Map<String, dynamic>;
+              print('json is:');
+              print(json);
+              result = json['results']; //不确定是不是这样
+            } else {
+              print('不太行');
+              result =
+              'Error getting IP address:\nHttp status ${response.statusCode}';
+            }
+          }catch(e){
+            print('e出错');
+            print(e);
+          }
           print('点完了');
         },
         tooltip: 'Increment',
