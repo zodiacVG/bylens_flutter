@@ -13,7 +13,7 @@ class popularTmdb {
   String releaseDate;
   String title;
   bool video;
-  var voteAverage; //因为有的评分是小数，有的是整数
+  double voteAverage; //因为有的评分是小数，有的是整数
   int voteCount;
 
   popularTmdb(
@@ -45,7 +45,7 @@ class popularTmdb {
     releaseDate = json['release_date'];
     title = json['title'];
     video = json['video'];
-    voteAverage = json['vote_average'];
+    voteAverage = json['vote_average']/1.0;
     voteCount = json['vote_count'];
   }
 

@@ -35,6 +35,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   int _counter = 0;
+  bool _showSearchTab=false; //显示
   Map result = {};
   String text = '没被点';
   PopularRequest popularRequest=PopularRequest();
@@ -95,11 +96,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                             SliverList(
                               delegate: SliverChildBuilderDelegate(
                                       (BuildContext context, int index) {
-                                    return Column(
-                                      children: <Widget>[
-                                        getSearchBarUI(),
-                                      ],
-                                    );
+                                    return Visibility(
+                                        child: Column(
+                                          children: <Widget>[
+                                            getSearchBarUI(),
+                                          ],
+                                        ),
+                                      visible: _showSearchTab,
+                                        );
                                   }, childCount: 1),
                             ),
                             // SliverPersistentHeader(
@@ -152,7 +156,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   Widget getSearchBarUI() {
-    return Padding(
+    return  Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
       child: Row(
         children: <Widget>[
@@ -239,33 +243,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       ),
       child: Padding(
         padding: EdgeInsets.only(
-            top: MediaQuery.of(context).padding.top, left: 8, right: 8),
+            top: MediaQuery.of(context).padding.top, left: 20, right: 20),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Container(
-              alignment: Alignment.centerLeft,
-              width: AppBar().preferredSize.height + 40,
-              height: AppBar().preferredSize.height,
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(32.0),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(Icons.arrow_back),
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
               child: Center(
                 child: Text(
-                  'Explore',
+                  'ByLens',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 22,
@@ -299,10 +284,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       borderRadius: const BorderRadius.all(
                         Radius.circular(32.0),
                       ),
-                      onTap: () {},
+                      onTap: () {
+                        setState(() {
+                          _showSearchTab=!_showSearchTab;
+                        });
+                      },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Icon(FontAwesomeIcons.mapMarkerAlt),
+                        child: Icon(Icons.search_rounded),
                       ),
                     ),
                   ),

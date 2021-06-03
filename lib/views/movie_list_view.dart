@@ -1,5 +1,6 @@
 import 'package:bylens/model/home_page_theme.dart';
 import 'package:bylens/model/popular_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
@@ -103,51 +104,23 @@ class movieListView extends StatelessWidget {
                                                   width: 4,
                                                 ),
                                                 Icon(
-                                                  FontAwesomeIcons.mapMarkerAlt,
+                                                  FontAwesomeIcons.globe,
                                                   size: 12,
-                                                  color: HotelAppTheme
-                                                      .buildLightTheme()
-                                                      .primaryColor,
+                                                  color: Colors.black26
                                                 ),
-                                                Expanded(
-                                                  child: Text(
-                                                    movieData.adult.toString(),
-                                                    overflow:
-                                                    TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.grey
-                                                            .withOpacity(0.8)),
-                                                  ),
-                                                ),
+                                                Padding(
+                                                    padding: const EdgeInsets.only(left: 4),
+                                                    child: Text(
+                                                        movieData.originalLanguage,
+                                                        overflow:
+                                                        TextOverflow.ellipsis,
+                                                        style: TextStyle(
+                                                            fontSize: 14,
+                                                            color: Colors.grey
+                                                                .withOpacity(0.8)),
+                                                      ),
+                                                )
                                               ],
-                                            ),
-                                            Padding(
-                                              padding:
-                                              const EdgeInsets.only(top: 4),
-                                              child: Row(
-                                                children: <Widget>[
-                                                  SmoothStarRating(
-                                                    allowHalfRating: true,
-                                                    starCount: 5,
-                                                    rating: movieData.popularity,
-                                                    size: 20,
-                                                    color: HotelAppTheme
-                                                        .buildLightTheme()
-                                                        .primaryColor,
-                                                    borderColor: HotelAppTheme
-                                                        .buildLightTheme()
-                                                        .primaryColor,
-                                                  ),
-                                                  Text(
-                                                    ' 应该有评分',
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.grey
-                                                            .withOpacity(0.8)),
-                                                  ),
-                                                ],
-                                              ),
                                             ),
                                           ],
                                         ),
@@ -163,16 +136,20 @@ class movieListView extends StatelessWidget {
                                       crossAxisAlignment:
                                       CrossAxisAlignment.end,
                                       children: <Widget>[
-                                        Text(
-                                          '不知道写啥',
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 22,
-                                          ),
+                                        SmoothStarRating(
+                                          allowHalfRating: true,
+                                          starCount: 5,
+                                          rating: movieData.voteAverage/2,
+                                          size: 20,
+                                          color: HotelAppTheme
+                                              .buildLightTheme()
+                                              .primaryColor,
+                                          borderColor: HotelAppTheme
+                                              .buildLightTheme()
+                                              .primaryColor,
                                         ),
                                         Text(
-                                          '/per night',
+                                          movieData.voteAverage.toString(),
                                           style: TextStyle(
                                               fontSize: 14,
                                               color:
@@ -184,6 +161,19 @@ class movieListView extends StatelessWidget {
                                 ],
                               ),
                             ),
+                            Container(
+                                constraints: BoxConstraints(
+                                  maxHeight: 70
+                                ),
+                              color: HotelAppTheme.buildLightTheme()
+                                    .backgroundColor,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 10,left: 20,right:20,bottom: 20),
+                                child: Text(
+                                  movieData.overview
+                                ),
+                              ),
+                            )
                           ],
                         ),
                         Positioned(
@@ -195,7 +185,7 @@ class movieListView extends StatelessWidget {
                               borderRadius: const BorderRadius.all(
                                 Radius.circular(32.0),
                               ),
-                              onTap: () {},
+                              onTap: () {}, //todo 这里的方法应当能够记录id
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Icon(
