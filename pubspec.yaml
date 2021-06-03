@@ -25,6 +25,9 @@ dependencies:
     sdk: flutter
   http: ^0.13.3
   cupertino_icons: ^1.0.0
+  font_awesome_flutter: ^8.8.1
+  smooth_star_rating: ^1.1.1
+  intl: ^0.16.0
 
 dev_dependencies:
   flutter_test:

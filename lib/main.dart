@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:bylens/network/populat_movie_request.dart';
 import 'package:bylens/model/popular_model.dart';
+import 'package:bylens/model/home_page_theme.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:bylens/views/movie_list_view.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
@@ -9,16 +12,12 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'By Lens',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(title: 'By Lens'),
@@ -28,33 +27,29 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   int _counter = 0;
   Map result = {};
   String text = '没被点';
   PopularRequest popularRequest=PopularRequest();
   List<popularTmdb> movies =[];
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  //准备做美好的界面
+  AnimationController animationController;
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    animationController = AnimationController(
+        duration: const Duration(milliseconds: 1000), vsync: this);
+    super.initState();
+    getPopularMovies();
   }
 
   void afterTap() {
@@ -63,58 +58,260 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  getPopularMovies() async { //获取pop榜单
+    var result=await popularRequest.getMoviePopularList(1);
+    print('从函数获取信息');
+    print(result);
+    setState(() {
+      movies.addAll(result);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+    return Theme(
+      data: HotelAppTheme.buildLightTheme(),
+      child: Container(
+        child: Scaffold(
+          body: Stack(
+            children: <Widget>[
+              InkWell(
+                splashColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                onTap: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                },
+                child: Column(
+                  children: <Widget>[
+                    getAppBarUI(),
+                    Expanded(
+                      child: NestedScrollView(
+                        controller: _scrollController,
+                        headerSliverBuilder:
+                            (BuildContext context, bool innerBoxIsScrolled) {
+                          return <Widget>[
+                            SliverList(
+                              delegate: SliverChildBuilderDelegate(
+                                      (BuildContext context, int index) {
+                                    return Column(
+                                      children: <Widget>[
+                                        getSearchBarUI(),
+                                      ],
+                                    );
+                                  }, childCount: 1),
+                            ),
+                            // SliverPersistentHeader(
+                            //   pinned: true,
+                            //   floating: true,
+                            //   delegate: ContestTabHeader(
+                            //     getFilterBarUI(),
+                            //   ),
+                            // ),
+                          ];
+                        },
+                        body: Container(
+                          color:
+                          HotelAppTheme.buildLightTheme().backgroundColor,
+                          child: ListView.builder(
+                            itemCount: movies.length,
+                            padding: const EdgeInsets.only(top: 8),
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (BuildContext context, int index) {
+                              final int count =
+                              movies.length > 10 ? 10 : movies.length;
+                              final Animation<double> animation =
+                              Tween<double>(begin: 0.0, end: 1.0).animate(
+                                  CurvedAnimation(
+                                      parent: animationController,
+                                      curve: Interval(
+                                          (1 / count) * index, 1.0,
+                                          curve: Curves.fastOutSlowIn)));
+                              animationController.forward();
+                              return movieListView
+                                (
+                                callback: () {},
+                                movieData: movies[index],
+                                animation: animation,
+                                animationController: animationController,
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+    );
+  }
+
+  Widget getSearchBarUI() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: HotelAppTheme.buildLightTheme().backgroundColor,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(38.0),
+                  ),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        offset: const Offset(0, 2),
+                        blurRadius: 8.0),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 16, right: 16, top: 4, bottom: 4),
+                  child: TextField(
+                    onChanged: (String txt) {},
+                    style: const TextStyle(
+                      fontSize: 18,
+                    ),
+                    cursorColor: HotelAppTheme.buildLightTheme().primaryColor,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'London...',
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: HotelAppTheme.buildLightTheme().primaryColor,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(38.0),
+              ),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.4),
+                    offset: const Offset(0, 2),
+                    blurRadius: 8.0),
+              ],
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(32.0),
+                ),
+                onTap: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Icon(FontAwesomeIcons.search,
+                      size: 20,
+                      color: HotelAppTheme.buildLightTheme().backgroundColor),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget getAppBarUI() {
+    return Container(
+      decoration: BoxDecoration(
+        color: HotelAppTheme.buildLightTheme().backgroundColor,
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              offset: const Offset(0, 2),
+              blurRadius: 8.0),
+        ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(
+            top: MediaQuery.of(context).padding.top, left: 8, right: 8),
+        child: Row(
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+            Container(
+              alignment: Alignment.centerLeft,
+              width: AppBar().preferredSize.height + 40,
+              height: AppBar().preferredSize.height,
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(32.0),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Icons.arrow_back),
+                  ),
+                ),
+              ),
             ),
-            Text(
-              '$text',
-              style: Theme.of(context).textTheme.headline4,
+            Expanded(
+              child: Center(
+                child: Text(
+                  'Explore',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 22,
+                  ),
+                ),
+              ),
             ),
+            Container(
+              width: AppBar().preferredSize.height + 40,
+              height: AppBar().preferredSize.height,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(32.0),
+                      ),
+                      onTap: () {},
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(Icons.favorite_border),
+                      ),
+                    ),
+                  ),
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(32.0),
+                      ),
+                      onTap: () {},
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(FontAwesomeIcons.mapMarkerAlt),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          print('电解铝');
-          afterTap();
-          var result;
-          print('开始');
-          // 1.拼接URL
-          final url = "https://api.themoviedb.org/3/movie/popular?api_key=3c4cb870e3f3c729ef1eb2d0538ba4f7&language=en-US?page=1";
-          // 2.发送请求
-          try{
-            var response = await http.get(Uri.parse(url),headers: {"Accept": "application/json"});
-            print(response);
-            if (response.statusCode == 200) {
-              print('代码ok');
-              var json = convert.jsonDecode(response.body) as Map<String, dynamic>;
-              print('json is:');
-              print(json);
-              result = json['results']; //不确定是不是这样
-            } else {
-              print('不太行');
-              result =
-              'Error getting IP address:\nHttp status ${response.statusCode}';
-            }
-          }catch(e){
-            print('e出错');
-            print(e);
-          }
-          print('点完了');
-        },
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

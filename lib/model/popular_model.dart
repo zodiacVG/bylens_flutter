@@ -1,3 +1,5 @@
+//用于测试的，流行榜model  注意这是一个小项目的model
+
 class popularTmdb {
   bool adult;
   String backdropPath;
@@ -11,7 +13,7 @@ class popularTmdb {
   String releaseDate;
   String title;
   bool video;
-  double voteAverage;
+  var voteAverage; //因为有的评分是小数，有的是整数
   int voteCount;
 
   popularTmdb(

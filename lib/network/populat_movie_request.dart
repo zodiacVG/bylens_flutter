@@ -15,10 +15,7 @@ class PopularRequest {
       var response = await http.get(Uri.parse(url),headers: {"Accept": "application/json"});
       print(response);
       if (response.statusCode == 200) {
-        print('代码ok');
         var json = convert.jsonDecode(response.body) as Map<String, dynamic>;
-        print('json is:');
-        print(json);
         result = json['results']; //不确定是不是这样
       } else {
         print('不太行');
@@ -35,8 +32,6 @@ class PopularRequest {
     for (var sub in subjects) {
       movies.add(popularTmdb.fromJson(sub));
     }
-    print(movies);
-    //todo 这里为了测试返回了result
-    return result;
+    return movies;
   }
 }
