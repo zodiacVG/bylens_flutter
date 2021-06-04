@@ -74,8 +74,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     EasyLoading.dismiss();
   }
 
-  switchToSearchPage(searchWords) {
-    Navigator.push(
+  switchToSearchPage(searchWords) async {
+    await Navigator.push(
       context,
       new MaterialPageRoute(
           builder: (BuildContext context) =>

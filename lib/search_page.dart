@@ -17,6 +17,7 @@ import 'package:bylens/search_page.dart';
 class SearchResultPage extends StatefulWidget {
   var searchWords;
   var newSearchWords;
+  bool noResult = false;
 
   SearchResultPage({Key key, this.searchWords}) : super(key: key);
   @override
@@ -27,27 +28,31 @@ class _SearchResultPageState extends State<SearchResultPage>
     with TickerProviderStateMixin {
   List<popularTmdb> movies = []; //搜索得到的电影结果
   SearchMoviesRequest searchMoviesRequest = SearchMoviesRequest();
+  Future<String> futureMovies;
 
   @override
   void initState() {
+    EasyLoading.init();
+    // getSearchMovies(widget.searchWords);
     super.initState();
-    EasyLoading.show(status: 'loading...');
-    getSearchMovies(widget.searchWords);
+    futureMovies = getSearchMovies(widget.searchWords); //获取信息的future任务
   }
 
-  getSearchMovies(searchWords) async {
+  Future<String> getSearchMovies(searchWords) async {
     print('现在的关键词');
     print(searchWords);
-    //获取pop榜单
+    //获取search
     var result = await searchMoviesRequest.getSearchResultList(searchWords);
     print('从函数获取信息');
-    print(result[0].title);
+    print(result);
+    if(result.length==0){
+      return 'no_result';
+    }
     setState(() {
       movies = [];
       movies.addAll(result);
     });
-    EasyLoading.dismiss();
-    print(movies[0].title);
+    return 'have_result';
   }
 
   @override
@@ -68,11 +73,35 @@ class _SearchResultPageState extends State<SearchResultPage>
                 children: <Widget>[
                   getAppBarUI(),
                   getSearchBarUI(),
-                  Container(
-                      child: movieListViewLite(
-                    callback: () {},
-                    movieData: movies[0],
-                  )),
+                  FutureBuilder(
+                    future: futureMovies,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        print('从data里获取数据');
+                        print(snapshot.data);
+                        if(snapshot.data=='have_result'){
+                          return Container(
+                              child: movieListViewLite(
+                                callback: () {},
+                                movieData: movies[0],
+                              ));
+                        }else{
+                          return Text('No Result, Please Search Again');
+                        }
+
+                      } else if (snapshot.hasError) {
+                        return Text("${snapshot.error}");
+                      }
+
+                      // By default, show a loading spinner.
+                      return CircularProgressIndicator();
+                    },
+                  )
+                  // Container(
+                  //     child: movieListViewLite(
+                  //   callback: () {},
+                  //   movieData: movies[0],
+                  // )),
                 ],
               ),
             ),
@@ -144,7 +173,12 @@ class _SearchResultPageState extends State<SearchResultPage>
                 ),
                 onTap: () {
                   FocusScope.of(context).requestFocus(FocusNode());
-                  getSearchMovies(widget.newSearchWords);
+                  Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            SearchResultPage(searchWords: widget.newSearchWords)),
+                  );
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),

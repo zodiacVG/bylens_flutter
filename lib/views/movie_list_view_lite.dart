@@ -45,7 +45,7 @@ class movieListViewLite extends StatelessWidget {
                     AspectRatio(
                       aspectRatio: 2,
                       child:  Image.network(
-                        'https://image.tmdb.org/t/p/original/rr7E0NoGKxvbkb89eR1GwfoYjpA.jpg',
+                        'https://image.tmdb.org/t/p/original'+movieData.backdropPath,
                         fit: BoxFit.cover,
                       ),
                     ),
