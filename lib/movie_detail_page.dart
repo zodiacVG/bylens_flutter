@@ -67,19 +67,9 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
   }
 
   Widget buildDetailWidget() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.only(top: 40.0),
-      child: Container(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Text('data'),
-          ],
-        ),
-      ),
+    return Image.network(
+      'https://image.tmdb.org/t/p/original' +
+          movieDetail.backdropPath,
     );
   }
 }
