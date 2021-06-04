@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:bylens/views/movie_list_view.dart';
 import 'package:bylens/search_page.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:bylens/movie_detail_page.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
@@ -149,7 +150,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                               curve: Curves.fastOutSlowIn)));
                               animationController.forward();
                               return movieListView(
-                                callback: () {},
+                                onTapCallback: (movieID) {
+                                  switchToMovieDetail(movieID);
+                                },
                                 movieData: movies[index],
                                 animation: animation,
                                 animationController: animationController,
@@ -319,6 +322,15 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           ],
         ),
       ),
+    );
+  }
+
+  void switchToMovieDetail(movieID) { //跳转至movie详情界面
+    Navigator.push(
+      context,
+      new MaterialPageRoute(
+          builder: (BuildContext context) =>
+             MovieDetailPage(movieID: movieID) ),
     );
   }
 }

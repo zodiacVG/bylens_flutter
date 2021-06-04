@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:bylens/views/movie_list_view.dart';
 import 'network/search_movie_request.dart';
 import 'package:bylens/views/movie_list_view_lite.dart';
+import 'package:bylens/movie_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:bylens/network/populat_movie_request.dart';
 import 'package:bylens/model/popular_model.dart';
@@ -82,7 +83,9 @@ class _SearchResultPageState extends State<SearchResultPage>
                         if(snapshot.data=='have_result'){
                           return Container(
                               child: movieListViewLite(
-                                callback: () {},
+                                onTapCallback: (movieID) {
+                                  switchToMovieDetail(movieID);
+                                },
                                 movieData: movies[0],
                               ));
                         }else{
@@ -265,6 +268,15 @@ class _SearchResultPageState extends State<SearchResultPage>
           ],
         ),
       ),
+    );
+  }
+
+  void switchToMovieDetail(movieID) {
+    Navigator.push(
+      context,
+      new MaterialPageRoute(
+          builder: (BuildContext context) =>
+              MovieDetailPage(movieID: movieID) ),
     );
   }
 }

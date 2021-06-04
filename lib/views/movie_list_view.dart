@@ -11,10 +11,11 @@ class movieListView extends StatelessWidget {
         this.movieData,  //单条电影信息
         this.animationController,
         this.animation,
-        this.callback})
+        this.onTapCallback
+      })
       : super(key: key);
 
-  final VoidCallback callback;
+  final ValueChanged onTapCallback; //触摸事件回调
   final popularTmdb movieData;  //单条数据,model对象形式
   final AnimationController animationController;
   final Animation<dynamic> animation;
@@ -35,7 +36,7 @@ class movieListView extends StatelessWidget {
               child: InkWell(
                 splashColor: Colors.transparent,
                 onTap: () {
-                  callback();
+                  onTapCallback(movieData.id); //将触摸事件回调回去
                 },
                 child: Container(
                   decoration: BoxDecoration(
