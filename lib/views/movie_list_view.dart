@@ -56,7 +56,7 @@ class movieListView extends StatelessWidget {
                           children: <Widget>[
                             AspectRatio(
                               aspectRatio: 2,
-                              child: Image.network(
+                              child:  Image.network(
                                 'https://image.tmdb.org/t/p/original'+movieData.backdropPath,
                                 fit: BoxFit.cover,
                               ),
@@ -162,15 +162,14 @@ class movieListView extends StatelessWidget {
                               ),
                             ),
                             Container(
-                                constraints: BoxConstraints(
-                                  maxHeight: 70
-                                ),
                               color: HotelAppTheme.buildLightTheme()
                                     .backgroundColor,
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 10,left: 20,right:20,bottom: 20),
                                 child: Text(
-                                  movieData.overview
+                                  movieData.overview,
+                                  maxLines: 3,
+                                  overflow: TextOverflow.fade,
                                 ),
                               ),
                             )
