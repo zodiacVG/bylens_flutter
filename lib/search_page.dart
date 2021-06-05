@@ -240,13 +240,11 @@ class _SearchResultPageState extends State<SearchResultPage>
                         Radius.circular(32.0),
                       ),
                       onTap: () {
-                        setState(() {
-                          //todo
-                        });
+                        Navigator.pop(context); //点击应当能回到首页
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Icon(Icons.search_rounded),
+                        child: Icon(Icons.home_outlined),
                       ),
                     ),
                   ),

@@ -159,6 +159,9 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
             ),
           ),
           Container(
+            height: 20,
+          ),
+          Container(
             padding: EdgeInsets.only(top: 20, left: 20, right: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
