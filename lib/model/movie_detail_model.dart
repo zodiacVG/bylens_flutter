@@ -57,9 +57,13 @@ class MovieDetail {
     adult = json['adult'];
     if(json['backdrop_path']==null){
       backdropPath='/v7baGyne7CsLxnM2maMwIxKZdVF.jpg'; //默认背景
+    }else{
+      backdropPath=json['backdrop_path'];
     }
     if(json['budget']==null){
       budget=0;
+    }else{
+      budget=json['budget'];
     }
     if (json['genres'] != null) {
       genres = new List<Genres>();
@@ -75,21 +79,34 @@ class MovieDetail {
     overview = json['overview'];
     popularity = json['popularity'];
     posterPath = json['poster_path'];
-    if (json['production_companies'] != null) {
+    if (json['production_companies'].length!=0) {
+      print('not nuulll');
+      print(json['production_companies']);
       productionCompanies = new List<ProductionCompanies>();
       json['production_companies'].forEach((v) {
         productionCompanies.add(new ProductionCompanies.fromJson(v));
       });
+    }else{
+      print('its nuull');
+      productionCompanies = new List<ProductionCompanies>(); //妈的...
+      productionCompanies.add(new ProductionCompanies(id:111,logoPath: null,name: 'Unknow',originCountry: 'Unknow'));
+      print(productionCompanies);
     }
-    if (json['production_countries'] != null) {
+    if (json['production_countries'] != []) {
       productionCountries = new List<ProductionCountries>();
       json['production_countries'].forEach((v) {
         productionCountries.add(new ProductionCountries.fromJson(v));
       });
     }
-    releaseDate = json['release_date'];
+    if(json['release_date']==null){
+      releaseDate='Unknow';
+    }else{
+      releaseDate = json['release_date'];
+    }
     if(json['revenue']==null){
       revenue=0;
+    }else{
+      revenue=json['revenue'];
     }
     runtime = json['runtime'];
     if (json['spoken_languages'] != null) {
@@ -169,7 +186,7 @@ class Genres {
 class ProductionCompanies {
   int id;
   String logoPath;
-  String name;
+  String name='Unknow';
   String originCountry;
 
   ProductionCompanies({this.id, this.logoPath, this.name, this.originCountry});

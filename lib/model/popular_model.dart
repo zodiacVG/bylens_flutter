@@ -34,7 +34,11 @@ class popularTmdb {
 
   popularTmdb.fromJson(Map<String, dynamic> json) {
     adult = json['adult'];
-    backdropPath = json['backdrop_path'];
+    if(json['backdrop_path']==null){
+      backdropPath='/v7baGyne7CsLxnM2maMwIxKZdVF.jpg'; //默认背景
+    }else{
+      backdropPath=json['backdrop_path'];
+    }
     genreIds = json['genre_ids'].cast<int>();
     id = json['id'];
     originalLanguage = json['original_language'];
@@ -42,7 +46,11 @@ class popularTmdb {
     overview = json['overview'];
     popularity = json['popularity'];
     posterPath = json['poster_path'];
-    releaseDate = json['release_date'];
+    if(json['release_date']==null){
+      releaseDate='Unknow';
+    }else{
+      releaseDate=json['release_date'];
+    }
     title = json['title'];
     video = json['video'];
     voteAverage = json['vote_average']/1.0;
