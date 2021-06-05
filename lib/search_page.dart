@@ -31,6 +31,8 @@ class _SearchResultPageState extends State<SearchResultPage>
   SearchMoviesRequest searchMoviesRequest = SearchMoviesRequest();
   Future<String> futureMovies;
 
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     EasyLoading.init();
@@ -46,7 +48,7 @@ class _SearchResultPageState extends State<SearchResultPage>
     var result = await searchMoviesRequest.getSearchResultList(searchWords);
     print('从函数获取信息');
     print(result);
-    if(result.length==0){
+    if (result.length == 0) {
       return 'no_result';
     }
     setState(() {
@@ -80,31 +82,17 @@ class _SearchResultPageState extends State<SearchResultPage>
                       if (snapshot.hasData) {
                         print('从data里获取数据');
                         print(snapshot.data);
-                        if(snapshot.data=='have_result'){
-                          return Container(
-                              child: movieListViewLite(
-                                onTapCallback: (movieID) {
-                                  switchToMovieDetail(movieID);
-                                },
-                                movieData: movies[0],
-                              ));
-                        }else{
+                        if (snapshot.data == 'have_result') {
+                          return Expanded(child: getMovieResultList());
+                        } else {
                           return Text('No Result, Please Search Again');
                         }
-
                       } else if (snapshot.hasError) {
                         return Text("${snapshot.error}");
                       }
-
-                      // By default, show a loading spinner.
                       return CircularProgressIndicator();
                     },
-                  )
-                  // Container(
-                  //     child: movieListViewLite(
-                  //   callback: () {},
-                  //   movieData: movies[0],
-                  // )),
+                  ),
                 ],
               ),
             ),
@@ -179,8 +167,8 @@ class _SearchResultPageState extends State<SearchResultPage>
                   Navigator.push(
                     context,
                     new MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            SearchResultPage(searchWords: widget.newSearchWords)),
+                        builder: (BuildContext context) => SearchResultPage(
+                            searchWords: widget.newSearchWords)),
                   );
                 },
                 child: Padding(
@@ -275,8 +263,20 @@ class _SearchResultPageState extends State<SearchResultPage>
     Navigator.push(
       context,
       new MaterialPageRoute(
-          builder: (BuildContext context) =>
-              MovieDetailPage(movieID: movieID) ),
+          builder: (BuildContext context) => MovieDetailPage(movieID: movieID)),
     );
+  }
+
+  Widget getMovieResultList() {
+    return ListView.builder(
+          shrinkWrap: true,
+          itemCount: movies.length,
+          itemBuilder: (context, i) => movieListViewLite(
+            onTapCallback: (movieID) {
+              switchToMovieDetail(movieID);
+            },
+            movieData: movies[i],
+          )
+      );
   }
 }

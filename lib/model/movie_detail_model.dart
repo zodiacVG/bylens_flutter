@@ -4,8 +4,7 @@
 class MovieDetail {
   bool adult;
   String backdropPath;
-  Null belongsToCollection;
-  int budget;
+  int budget=0;
   List<Genres> genres;
   String homepage;
   int id;
@@ -18,7 +17,7 @@ class MovieDetail {
   List<ProductionCompanies> productionCompanies;
   List<ProductionCountries> productionCountries;
   String releaseDate;
-  int revenue;
+  int revenue=0;
   int runtime;
   List<SpokenLanguages> spokenLanguages;
   String status;
@@ -31,8 +30,7 @@ class MovieDetail {
   MovieDetail(
       {this.adult,
         this.backdropPath,
-        this.belongsToCollection,
-        this.budget,
+        this.budget, //默认值不知道
         this.genres,
         this.homepage,
         this.id,
@@ -45,7 +43,7 @@ class MovieDetail {
         this.productionCompanies,
         this.productionCountries,
         this.releaseDate,
-        this.revenue,
+        this.revenue, //默认值
         this.runtime,
         this.spokenLanguages,
         this.status,
@@ -57,9 +55,12 @@ class MovieDetail {
 
   MovieDetail.fromJson(Map<String, dynamic> json) {
     adult = json['adult'];
-    backdropPath = json['backdrop_path'];
-    belongsToCollection = json['belongs_to_collection'];
-    budget = json['budget'];
+    if(json['backdrop_path']==null){
+      backdropPath='/v7baGyne7CsLxnM2maMwIxKZdVF.jpg'; //默认背景
+    }
+    if(json['budget']==null){
+      budget=0;
+    }
     if (json['genres'] != null) {
       genres = new List<Genres>();
       json['genres'].forEach((v) {
@@ -87,7 +88,9 @@ class MovieDetail {
       });
     }
     releaseDate = json['release_date'];
-    revenue = json['revenue'];
+    if(json['revenue']==null){
+      revenue=0;
+    }
     runtime = json['runtime'];
     if (json['spoken_languages'] != null) {
       spokenLanguages = new List<SpokenLanguages>();
@@ -107,7 +110,6 @@ class MovieDetail {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['adult'] = this.adult;
     data['backdrop_path'] = this.backdropPath;
-    data['belongs_to_collection'] = this.belongsToCollection;
     data['budget'] = this.budget;
     if (this.genres != null) {
       data['genres'] = this.genres.map((v) => v.toJson()).toList();

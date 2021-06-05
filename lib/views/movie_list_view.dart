@@ -138,6 +138,7 @@ class movieListView extends StatelessWidget {
                                       CrossAxisAlignment.end,
                                       children: <Widget>[
                                         SmoothStarRating(
+                                          isReadOnly: true,
                                           allowHalfRating: true,
                                           starCount: 5,
                                           rating: movieData.voteAverage/2,
