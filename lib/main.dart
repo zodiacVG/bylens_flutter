@@ -7,6 +7,8 @@ import 'package:bylens/views/movie_list_view.dart';
 import 'package:bylens/search_page.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:bylens/movie_detail_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:bylens/common/global_info.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
@@ -31,6 +33,8 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
   final String title;
+  List<String> favorMovieID=[];
+  //todo 一开始应当能够获得preference
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -152,6 +156,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                               return movieListView(
                                 onTapCallback: (movieID) {
                                   switchToMovieDetail(movieID);
+                                },
+                                onTapFavorCallback:(movieID){
+                                  addFavorMovie(movieID);
                                 },
                                 movieData: movies[index],
                                 animation: animation,
@@ -332,5 +339,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           builder: (BuildContext context) =>
              MovieDetailPage(movieID: movieID) ),
     );
+  }
+
+  void addFavorMovie(movieID) async{ //添加喜爱的电影
+    Global.favorMovieList.add(movieID); //添加id
+    //todo 需要有个列表存储着id
+    
   }
 }

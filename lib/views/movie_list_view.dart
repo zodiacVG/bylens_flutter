@@ -11,14 +11,17 @@ class movieListView extends StatelessWidget {
         this.movieData,  //单条电影信息
         this.animationController,
         this.animation,
-        this.onTapCallback
+        this.onTapCallback,
+        this.onTapFavorCallback,
       })
       : super(key: key);
 
   final ValueChanged onTapCallback; //触摸事件回调
+  final ValueChanged onTapFavorCallback; //点击❤回调
   final popularTmdb movieData;  //单条数据,model对象形式
   final AnimationController animationController;
   final Animation<dynamic> animation;
+  final ValueChanged onTapFavorCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -186,7 +189,9 @@ class movieListView extends StatelessWidget {
                               borderRadius: const BorderRadius.all(
                                 Radius.circular(32.0),
                               ),
-                              onTap: () {}, //todo 这里的方法应当能够记录id
+                              onTap: () {
+                                onTapFavorCallback(movieData.id); //添加到喜爱列表,传递到上一层
+                              }, //todo 这里的方法应当能够记录id
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Icon(
