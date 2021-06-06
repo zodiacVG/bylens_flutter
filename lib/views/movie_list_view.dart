@@ -249,6 +249,11 @@ class _movieListViewState extends State<movieListView> {
       ),
       onTap: () {
         print('点过了，没用~');
+        Global.favorMovieList.remove(widget.movieData.id);
+        Global.saveFavorList();  //删除掉该收藏项
+        setState(() {
+          favorButtonSelected=false;
+        });
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
