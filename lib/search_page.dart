@@ -7,6 +7,7 @@ import 'package:bylens/views/movie_list_view.dart';
 import 'network/search_movie_request.dart';
 import 'package:bylens/views/movie_list_view_lite.dart';
 import 'package:bylens/movie_detail_page.dart';
+import 'package:bylens/my_favor_page.dart';
 import 'package:flutter/material.dart';
 import 'package:bylens/network/populat_movie_request.dart';
 import 'package:bylens/model/popular_model.dart';
@@ -226,7 +227,9 @@ class _SearchResultPageState extends State<SearchResultPage>
                       borderRadius: const BorderRadius.all(
                         Radius.circular(32.0),
                       ),
-                      onTap: () {},
+                      onTap: () {
+                        switchToFavorMovie();
+                      },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Icon(Icons.favorite_border),
@@ -262,6 +265,15 @@ class _SearchResultPageState extends State<SearchResultPage>
       context,
       new MaterialPageRoute(
           builder: (BuildContext context) => MovieDetailPage(movieID: movieID)),
+    );
+  }
+
+  void switchToFavorMovie() { //跳转至movie详情界面
+    Navigator.push(
+      context,
+      new MaterialPageRoute(
+          builder: (BuildContext context) =>
+              MyFavorPage()),
     );
   }
 
