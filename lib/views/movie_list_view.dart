@@ -21,7 +21,6 @@ class movieListView extends StatelessWidget {
   final popularTmdb movieData;  //单条数据,model对象形式
   final AnimationController animationController;
   final Animation<dynamic> animation;
-  final ValueChanged onTapFavorCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -190,6 +189,8 @@ class movieListView extends StatelessWidget {
                                 Radius.circular(32.0),
                               ),
                               onTap: () {
+                                print('movieID是：');
+                                print(movieData.id);
                                 onTapFavorCallback(movieData.id); //添加到喜爱列表,传递到上一层
                               }, //todo 这里的方法应当能够记录id
                               child: Padding(

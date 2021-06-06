@@ -9,11 +9,13 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:bylens/movie_detail_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bylens/common/global_info.dart';
+import 'package:bylens/my_favor_page.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
 void main() {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized(); //一开始preference报错，这里是stackoverflow上的答案
+  Global.init().then((e) => runApp(MyApp()));  //先初始化全局变量
 }
 
 class MyApp extends StatelessWidget {
@@ -299,7 +301,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       borderRadius: const BorderRadius.all(
                         Radius.circular(32.0),
                       ),
-                      onTap: () {},
+                      onTap: () {
+                        switchToFavorMovie();
+                      },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Icon(Icons.favorite_border),
@@ -341,9 +345,18 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     );
   }
 
+  void switchToFavorMovie() { //跳转至movie详情界面
+    Navigator.push(
+      context,
+      new MaterialPageRoute(
+          builder: (BuildContext context) =>
+            MyFavorPage()),
+    );
+  }
+
   void addFavorMovie(movieID) async{ //添加喜爱的电影
     Global.favorMovieList.add(movieID); //添加id
-    //todo 需要有个列表存储着id
-    
+    //todo 没有往reference里存
+    Global.saveFavorList();
   }
 }

@@ -1,22 +1,19 @@
+import 'dart:ui';
+
+import 'package:bylens/network/movie_detail_request.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:bylens/model/popular_model.dart';
 import 'package:bylens/model/home_page_theme.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:bylens/views/movie_list_view.dart';
-import 'network/search_movie_request.dart';
+import 'package:bylens/common/global_info.dart';
 import 'package:bylens/views/movie_list_view_lite.dart';
+import 'package:bylens/model/movie_detail_model.dart';
 import 'package:bylens/movie_detail_page.dart';
-import 'package:flutter/material.dart';
-import 'package:bylens/network/populat_movie_request.dart';
-import 'package:bylens/model/popular_model.dart';
-import 'package:bylens/model/home_page_theme.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:bylens/views/movie_list_view.dart';
-import 'package:bylens/search_page.dart';
+import 'package:bylens/views/movie_list_lite_from_detail_data.dart';
+
 
 class MyFavorPage extends StatefulWidget {
-  List<String> favorMivieIDList; //喜爱电影的ID的list
+  List<int> favorMivieIDList; //喜爱电影的ID的list
 
   MyFavorPage({Key key}) : super(key: key);
   @override
@@ -25,8 +22,8 @@ class MyFavorPage extends StatefulWidget {
 
 class _MyFavorPageState extends State<MyFavorPage>
     with TickerProviderStateMixin {
-  List<popularTmdb> favorMiviesList = []; //搜索得到的电影结果
-  SearchMoviesRequest searchMoviesRequest = SearchMoviesRequest();
+  List<MovieDetail> favorMiviesList = []; //搜索得到的电影结果
+  MovieDetailRequest _movieDetailRequest=MovieDetailRequest();
   Future<String> futureMovies;
 
   final ScrollController _scrollController = ScrollController();
@@ -34,25 +31,25 @@ class _MyFavorPageState extends State<MyFavorPage>
   @override
   void initState() {
     EasyLoading.init();
-    // getSearchMovies(widget.searchWords);
+    // getFavorMovieListFromRequest(widget.searchWords);
     super.initState();
-    futureMovies = getSearchMovies(widget.searchWords); //获取信息的future任务
+    widget.favorMivieIDList=Global.favorMovieList;
+    futureMovies = getFavorMovieListFromRequest(widget.favorMivieIDList); //获取信息的future任务
   }
 
-  Future<String> getSearchMovies(searchWords) async {
-    print('现在的关键词');
-    print(searchWords);
+  Future<String> getFavorMovieListFromRequest(favorMovieIDList) async {
+    print('现在的movieIDList');
+    print(favorMovieIDList);
     //获取search
-    var result = await searchMoviesRequest.getSearchResultList(searchWords);
+    for (var oneMovieID in favorMovieIDList){
+      var result = await _movieDetailRequest.getMovieDetail(oneMovieID);
+      favorMiviesList.add(result); //挨个获取电影细节并且添加进列表
+    }
     print('从函数获取信息');
-    print(result);
-    if (result.length == 0) {
+    print(favorMiviesList);
+    if (favorMiviesList.length == 0) {
       return 'no_result';
     }
-    setState(() {
-      favorMiviesList = [];
-      favorMiviesList.addAll(result);
-    });
     return 'have_result';
   }
 
@@ -82,7 +79,7 @@ class _MyFavorPageState extends State<MyFavorPage>
                         if (snapshot.data == 'have_result') {
                           return Expanded(child: getMovieResultList());
                         } else {
-                          return Text('No Result, Please Search Again');
+                          return Text('No Favor Movies, go and add one!');
                         }
                       } else if (snapshot.hasError) {
                         return Text("${snapshot.error}");
@@ -183,7 +180,7 @@ class _MyFavorPageState extends State<MyFavorPage>
     return ListView.builder(
         shrinkWrap: true,
         itemCount: favorMiviesList.length,
-        itemBuilder: (context, i) => movieListViewLite(
+        itemBuilder: (context, i) => movieListViewLiteFromDetailData(
           onTapCallback: (movieID) {
             switchToMovieDetail(movieID);
           },
