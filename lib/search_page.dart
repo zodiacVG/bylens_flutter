@@ -205,7 +205,7 @@ class _SearchResultPageState extends State<SearchResultPage>
             Container(
               child: Center(
                 child: Text(
-                  'ByLens',
+                  'Search',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 22,

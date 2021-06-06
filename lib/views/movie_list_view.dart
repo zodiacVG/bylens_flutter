@@ -4,8 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
+import 'package:bylens/common/global_info.dart';
 
-class movieListView extends StatelessWidget {
+class movieListView extends StatefulWidget {
   const movieListView(  //单条电影信息
       {Key key,
         this.movieData,  //单条电影信息
@@ -23,22 +24,39 @@ class movieListView extends StatelessWidget {
   final Animation<dynamic> animation;
 
   @override
+  _movieListViewState createState() => _movieListViewState();
+}
+
+class _movieListViewState extends State<movieListView> {
+  bool favorButtonSelected=false;  //是否已经在列表里了
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(Global.favorMovieList.contains(widget.movieData.id )){
+      favorButtonSelected=true; //已经在收藏列表里面了
+    }
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: animationController,
+      animation: widget.animationController,
       builder: (BuildContext context, Widget child) {
         return FadeTransition(
-          opacity: animation,
+          opacity: widget.animation,
           child: Transform(
             transform: Matrix4.translationValues(
-                0.0, 50 * (1.0 - animation.value), 0.0),
+                0.0, 50 * (1.0 - widget.animation.value), 0.0),
             child: Padding(
               padding: const EdgeInsets.only(
                   left: 24, right: 24, top: 8, bottom: 16),
               child: InkWell(
                 splashColor: Colors.transparent,
                 onTap: () {
-                  onTapCallback(movieData.id); //将触摸事件回调回去
+                  widget.onTapCallback(widget.movieData.id); //将触摸事件回调回去
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -60,7 +78,7 @@ class movieListView extends StatelessWidget {
                             AspectRatio(
                               aspectRatio: 2,
                               child:  Image.network(
-                                'https://image.tmdb.org/t/p/original'+movieData.backdropPath,
+                                'https://image.tmdb.org/t/p/original'+widget.movieData.backdropPath,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -83,7 +101,7 @@ class movieListView extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Text(
-                                              movieData.title,
+                                              widget.movieData.title,
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w600,
@@ -97,7 +115,7 @@ class movieListView extends StatelessWidget {
                                               MainAxisAlignment.start,
                                               children: <Widget>[
                                                 Text(
-                                                  movieData.releaseDate,
+                                                  widget.movieData.releaseDate,
                                                   style: TextStyle(
                                                       fontSize: 14,
                                                       color: Colors.grey
@@ -114,7 +132,7 @@ class movieListView extends StatelessWidget {
                                                 Padding(
                                                     padding: const EdgeInsets.only(left: 4),
                                                     child: Text(
-                                                        movieData.originalLanguage,
+                                                        widget.movieData.originalLanguage,
                                                         overflow:
                                                         TextOverflow.ellipsis,
                                                         style: TextStyle(
@@ -143,7 +161,7 @@ class movieListView extends StatelessWidget {
                                           isReadOnly: true,
                                           allowHalfRating: true,
                                           starCount: 5,
-                                          rating: movieData.voteAverage/2,
+                                          rating: widget.movieData.voteAverage/2,
                                           size: 20,
                                           color: HotelAppTheme
                                               .buildLightTheme()
@@ -153,7 +171,7 @@ class movieListView extends StatelessWidget {
                                               .primaryColor,
                                         ),
                                         Text(
-                                          movieData.voteAverage.toString(),
+                                          widget.movieData.voteAverage.toString(),
                                           style: TextStyle(
                                               fontSize: 14,
                                               color:
@@ -171,7 +189,7 @@ class movieListView extends StatelessWidget {
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 10,left: 20,right:20,bottom: 20),
                                 child: Text(
-                                  movieData.overview,
+                                  widget.movieData.overview,
                                   maxLines: 3,
                                   overflow: TextOverflow.fade,
                                 ),
@@ -184,24 +202,8 @@ class movieListView extends StatelessWidget {
                           right: 8,
                           child: Material(
                             color: Colors.transparent,
-                            child: InkWell(
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(32.0),
-                              ),
-                              onTap: () {
-                                print('movieID是：');
-                                print(movieData.id);
-                                onTapFavorCallback(movieData.id); //添加到喜爱列表,传递到上一层
-                              }, //todo 这里的方法应当能够记录id
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Icon(
-                                  Icons.favorite_border,
-                                  color: HotelAppTheme.buildLightTheme()
-                                      .primaryColor,
-                                ),
-                              ),
-                            ),
+                            child: favorButtonSelected? selectedFavor():unSelectedFavor()
+                            //未被选择/选择的爱心
                           ),
                         )
                       ],
@@ -213,6 +215,49 @@ class movieListView extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  Widget unSelectedFavor() {
+    return InkWell(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(32.0),
+      ),
+      onTap: () {
+        print('movieID是：');
+        print(widget.movieData.id);
+        widget.onTapFavorCallback(widget.movieData.id); //添加到喜爱列表,传递到上一层
+        setState(() {
+          favorButtonSelected=true;  //这样点击了之后就会变成实心的形状
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Icon(
+          Icons.favorite_border,
+          color: HotelAppTheme.buildLightTheme()
+              .primaryColor,
+        ),
+      ),
+    );
+  }
+
+  Widget selectedFavor(){
+    return InkWell(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(32.0),
+      ),
+      onTap: () {
+        print('点过了，没用~');
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Icon(
+          Icons.favorite_outlined,
+          color: HotelAppTheme.buildLightTheme()
+              .primaryColor,
+        ),
+      ),
     );
   }
 }

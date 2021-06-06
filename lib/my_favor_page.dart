@@ -116,7 +116,7 @@ class _MyFavorPageState extends State<MyFavorPage>
             Container(
               child: Center(
                 child: Text(
-                  'ByLens',
+                  'MyFavor',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 22,
