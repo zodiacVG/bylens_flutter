@@ -23,7 +23,7 @@ class Global {
     var movieList=_prefs.getString('favorMovieList');
     if (movieList != null) {
       try {
-         favorMovieList= jsonDecode(movieList); //todo 不确定，因为movielist是json格式的，不知道能不能转换
+         favorMovieList.addAll(jsonDecode(movieList).cast<int>()); //todo 不确定，因为movielist是json格式的，不知道能不能转换
         print('例表信息是：');
         print(favorMovieList);
       } catch (e) {
@@ -34,6 +34,12 @@ class Global {
     }
   }
 
-  static saveFavorList() =>  //todo 不确定是不是这样写的
-      _prefs.setString("favorMovieList", jsonEncode(favorMovieList));
+  static saveFavorList(){
+    print('想要写到里面去！');
+    print(favorMovieList);
+    _prefs.setString("favorMovieList", jsonEncode(favorMovieList));
+    print('写完之后');
+    print(_prefs.getString('favorMovieList'));
+  }
+
   }
