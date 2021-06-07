@@ -7,8 +7,8 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="bylens"
-        android:icon="@mipmap/ic_launcher">
+        android:label="byLENS"
+        android:icon="@mipmap/_ic_laucher">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
