@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:bylens/common/global_info.dart';
 
 class MovieDetailPage extends StatefulWidget {
   var movieID;
@@ -18,6 +19,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
   Future futureMovieDetail; //用于fturebuilder的future
   MovieDetail movieDetail; //存放moviedetail的对象
   MovieDetailRequest movieDetailRequest = MovieDetailRequest(); //http类
+  bool favorButtonSelected=false;  //是否已经在列表里了
 
   void initState() {
     //初始化
@@ -34,6 +36,9 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
     setState(() {
       movieDetail = result;
     });
+    if(Global.favorMovieList.contains(movieDetail.id)){
+      favorButtonSelected=true; //已经在收藏列表里面了
+    }
     return 'get_success';
   }
 
@@ -68,8 +73,21 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
       children: [Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.network(
-            'https://image.tmdb.org/t/p/original' + movieDetail.backdropPath,
+          Stack(
+            children: [
+              Image.network(
+              'https://image.tmdb.org/t/p/original' + movieDetail.backdropPath,
+            ),
+              Positioned(
+                    top: MediaQuery.of(context).size.width*(13/32),
+                    right: 8,
+                    child: Material(
+                        color: Colors.transparent,
+                        child: favorButtonSelected? selectedFavor():unSelectedFavor()
+                      //未被选择/选择的爱心
+                    ),
+                  )
+            ]
           ),
           Container(
             padding: EdgeInsets.only(top: 20),
@@ -229,6 +247,57 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
           )
         ],
       ),]
+    );
+  }
+
+  Widget unSelectedFavor() {
+    return InkWell(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(32.0),
+      ),
+      onTap: () {
+        print('movieID是：');
+        print(movieDetail.id);
+        Global.favorMovieList.add(movieDetail.id);
+        Global.saveFavorList();
+        setState(() {
+          favorButtonSelected=true;  //这样点击了之后就会变成实心的形状
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Icon(
+          Icons.favorite_border,
+          color: HotelAppTheme.buildLightTheme()
+              .primaryColor,
+          size: 40,
+        ),
+      ),
+    );
+  }
+
+  Widget selectedFavor(){
+    return InkWell(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(32.0),
+      ),
+      onTap: () {
+        print('点过了，没用~');
+        Global.favorMovieList.remove(movieDetail.id);
+        Global.saveFavorList();  //删除掉该收藏项
+        setState(() {
+          favorButtonSelected=false;
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Icon(
+          Icons.favorite_outlined,
+          color: HotelAppTheme.buildLightTheme()
+              .primaryColor,
+          size: 40,
+        ),
+      ),
     );
   }
 }
