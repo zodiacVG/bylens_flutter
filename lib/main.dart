@@ -13,6 +13,8 @@ import 'package:bylens/my_favor_page.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
+import 'info_page.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized(); //一开始preference报错，这里是stackoverflow上的答案
   Global.init().then((e) => runApp(MyApp()));  //先初始化全局变量
@@ -277,16 +279,36 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Container(
-              child: Center(
-                child: Text(
-                  'ByLens',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 22,
+            Row(
+              children: [
+                Container(
+                  child: Center(
+                      child: InkWell(
+                        onTap: (){
+                          switchToInfoPage();
+                        },
+                        child: Icon(
+                            Icons.menu
+                        ),
+                      )
                   ),
                 ),
-              ),
+                Container(
+                  width: 5,
+                ),
+                Container(
+                  child: Center(
+                    child: Text(
+                      'ByLens',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 22,
+                      ),
+                    ),
+                  ),
+                ),
+
+              ],
             ),
             Container(
               width: AppBar().preferredSize.height + 40,
@@ -358,5 +380,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     Global.favorMovieList.add(movieID); //添加id
     //todo 没有往reference里存
     Global.saveFavorList();
+  }
+
+  void switchToInfoPage() {
+    Navigator.push(
+      context,
+      new MaterialPageRoute(
+          builder: (BuildContext context) =>
+              InfoPage()),
+    );
   }
 }

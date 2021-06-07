@@ -195,15 +195,17 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                 Row(
                   children: [
                     if (movieDetail.productionCompanies[0].logoPath != null)
-                      Image.network(
-                        //logo图片可能是空的
-                        'https://image.tmdb.org/t/p/original' +
-                            movieDetail.productionCompanies[0].logoPath,
-                        width: 50,
-                        height: 50,
+                      Container(
+                        padding: EdgeInsets.only(left: 5,right: 15),
+                        child: Image.network(
+                          //logo图片可能是空的
+                          'https://image.tmdb.org/t/p/original' +
+                              movieDetail.productionCompanies[0].logoPath,
+                          width: 50,
+                          height: 50,
+                        ),
                       ),
                     Container(
-                      margin: EdgeInsets.only(left: 20),
                       child: Text(
                         movieDetail.productionCompanies[0].name,
                         style: TextStyle(fontWeight: FontWeight.bold),
