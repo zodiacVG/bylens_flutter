@@ -63,96 +63,82 @@ class _InfoPageState extends State<InfoPage>{
                              ),
                              Container(
                                height: 10,
-                               width: MediaQuery.of(context).size.width-60,
                              ),
                              Row(
                                children: [
                                  Container(
                                    width: 25,
                                  ),
-                                 Container(
-                                   width: MediaQuery.of(context).size.width-100,
-                                   child: Column(
-                                     crossAxisAlignment: CrossAxisAlignment.start,
-                                     children: [
-                                       Container(
-                                         child: Text(
-                                           '🎈 View home page to find what you like.',
-                                           style: TextStyle(
-                                               fontSize: 15,
-                                               fontWeight: FontWeight.w500
-                                           ),
-                                         ),
+                                 Column(
+                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                   children: [
+                                     Text(
+                                       '🎈 View home page to find what you like.',
+                                       style: TextStyle(
+                                           fontSize: 15,
+                                           fontWeight: FontWeight.w500
                                        ),
-                                       Text(
-                                         '🎈 Tap ♥ on movie card to add it to favor list.',
-                                         style: TextStyle(
-                                             fontSize: 15,
-                                             fontWeight: FontWeight.w500
-                                         ),
+                                     ),
+                                     Text(
+                                       '🎈 Tap ♥ on movie card to add it to favor list.',
+                                       style: TextStyle(
+                                           fontSize: 15,
+                                           fontWeight: FontWeight.w500
                                        ),
-                                       Text(
-                                         '🎈 Tap 🔍 to search movies, and add them.',
-                                         style: TextStyle(
-                                             fontSize: 15,
-                                             fontWeight: FontWeight.w500
-                                         ),
+                                     ),
+                                     Text(
+                                       '🎈 Tap 🔍 to search movies, and add them.',
+                                       style: TextStyle(
+                                           fontSize: 15,
+                                           fontWeight: FontWeight.w500
                                        ),
-                                       Text(
-                                         '🎈 Tap ♥ on bar to view your favor list.',
-                                         style: TextStyle(
-                                             fontSize: 15,
-                                             fontWeight: FontWeight.w500
-                                         ),
+                                     ),
+                                     Text(
+                                       '🎈 Tap ♥ on bar to view your favor list.',
+                                       style: TextStyle(
+                                           fontSize: 15,
+                                           fontWeight: FontWeight.w500
                                        ),
-                                     ],
-                                   ),
+                                     ),
+                                   ],
                                  ),
                                ],
                              ),
                            ],
                          ),
+                           Container(
+                             height: 150,
+                           ),
+                           Text(
+                               'By Lens is based on TheMovieDataBase API.'
+                         ),
+                         ElevatedButton(
+                             onPressed:_launchURL,
+                             child: Text(
+                               'Visit TheMovieDB API'
+                             )
+                         ),
+                         Container(
+                           height: 50,
+                         ),
+                         Text(
+                             'Developed by ZodiacVG',
+                           style: TextStyle(
+                             fontWeight: FontWeight.w700
+                           ),
+                         ),
+                         ElevatedButton(
+                             onPressed:_launchGithubURL,
+                             child: Text(
+                                 'Contact me on Github'
+                             )
+                         )
                        ],
                      ),
                    )
                  ],
                ),
              ),
-             Positioned(
-               bottom: 70,
-                 child: Container(
-                   padding: EdgeInsets.only(left: 25,right: 25),
-                   child: Column(
-                     crossAxisAlignment: CrossAxisAlignment.center,
-                     children: [
-                       Text(
-                           'By Lens is based on TheMovieDataBase API.'
-                       ),
-                       ElevatedButton(
-                           onPressed:_launchURL,
-                           child: Text(
-                               'Visit TheMovieDB API'
-                           )
-                       ),
-                       Container(
-                         height: 50,
-                       ),
-                       Text(
-                         'Developed by ZodiacVG',
-                         style: TextStyle(
-                             fontWeight: FontWeight.w700
-                         ),
-                       ),
-                       ElevatedButton(
-                           onPressed:_launchGithubURL,
-                           child: Text(
-                               'Contact me on Github'
-                           )
-                       )
-                     ],
-                   ),
-                 )
-             )
            ],
          ),
        ),

@@ -69,7 +69,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
   }
 
   Widget buildDetailWidget() {
-    return Column(
+    return ListView(
       children: [Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -89,167 +89,163 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                   )
             ]
           ),
-          Column(
-            children: [
-              Container(
-                padding: EdgeInsets.only(top: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Expanded(
-                      child: Container(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 16, top: 8, bottom: 8),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                movieDetail.title,
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 27,
-                                ),
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    movieDetail.releaseDate,
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.grey.withOpacity(0.8)),
-                                  ),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  Icon(FontAwesomeIcons.globe,
-                                      size: 14, color: Colors.black26),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 4),
-                                    child: Text(
-                                      movieDetail.originalLanguage,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          color: Colors.grey.withOpacity(0.8)),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 16, top: 8),
+          Container(
+            padding: EdgeInsets.only(top: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 16, top: 8, bottom: 8),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          SmoothStarRating(
-                            isReadOnly: true,
-                            allowHalfRating: true,
-                            starCount: 5,
-                            rating: movieDetail.voteAverage / 2,
-                            size: 25,
-                            color: HotelAppTheme.buildLightTheme().primaryColor,
-                            borderColor: HotelAppTheme.buildLightTheme().primaryColor,
-                          ),
                           Text(
-                            movieDetail.voteAverage.toString(),
+                            movieDetail.title,
+                            textAlign: TextAlign.left,
                             style: TextStyle(
-                                fontSize: 20, color: Colors.grey.withOpacity(0.8)),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 30,
+                            ),
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                movieDetail.releaseDate,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.grey.withOpacity(0.8)),
+                              ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Icon(FontAwesomeIcons.globe,
+                                  size: 14, color: Colors.black26),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 4),
+                                child: Text(
+                                  movieDetail.originalLanguage,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.grey.withOpacity(0.8)),
+                                ),
+                              )
+                            ],
                           ),
                         ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 20, left: 20, right: 20),
-                child: Text(
-                  movieDetail.overview,
-                  style: TextStyle(fontSize: 14),
+                Padding(
+                  padding: const EdgeInsets.only(right: 16, top: 8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      SmoothStarRating(
+                        isReadOnly: true,
+                        allowHalfRating: true,
+                        starCount: 5,
+                        rating: movieDetail.voteAverage / 2,
+                        size: 30,
+                        color: HotelAppTheme.buildLightTheme().primaryColor,
+                        borderColor: HotelAppTheme.buildLightTheme().primaryColor,
+                      ),
+                      Text(
+                        movieDetail.voteAverage.toString(),
+                        style: TextStyle(
+                            fontSize: 20, color: Colors.grey.withOpacity(0.8)),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                height: 20,
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 20, left: 20, right: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+            child: Text(
+              movieDetail.overview,
+              style: TextStyle(fontSize: 14),
+            ),
+          ),
+          Container(
+            height: 20,
+          ),
+          Container(
+            padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('ProductionCompuny',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800
+                  ),
+                ),
+                Container( //占位用的
+                  height: 5,
+                ),
+                Row(
                   children: [
-                    Text('ProductionCompuny',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w800
+                    if (movieDetail.productionCompanies[0].logoPath != null)
+                      Container(
+                        padding: EdgeInsets.only(left: 5,right: 15),
+                        child: Image.network(
+                          //logo图片可能是空的
+                          'https://image.tmdb.org/t/p/original' +
+                              movieDetail.productionCompanies[0].logoPath,
+                          width: 50,
+                          height: 50,
+                        ),
+                      ),
+                    Container(
+                      child: Text(
+                        movieDetail.productionCompanies[0].name,
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
-                    Container( //占位用的
-                      height: 5,
-                    ),
-                    Row(
-                      children: [
-                        if (movieDetail.productionCompanies[0].logoPath != null)
-                          Container(
-                            padding: EdgeInsets.only(left: 5,right: 15),
-                            child: Image.network(
-                              //logo图片可能是空的
-                              'https://image.tmdb.org/t/p/original' +
-                                  movieDetail.productionCompanies[0].logoPath,
-                              width: 50,
-                              height: 50,
-                            ),
-                          ),
-                        Container(
-                          child: Text(
-                            movieDetail.productionCompanies[0].name,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 15, left: 20, right: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(top: 15, left: 20, right: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Budget&Revenue',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w800
+                  ),
+                ),
+                Container( //占位用的
+                  height: 5,
+                ),
+                Row(
                   children: [
-                    Text('Budget&Revenue',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w800
+                    Container(
+                      child: Text(
+                        'Budget: \$'+movieDetail.budget.toString(),
                       ),
                     ),
-                    Container( //占位用的
-                      height: 5,
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          child: Text(
-                            'Budget: \$'+movieDetail.budget.toString(),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 20),
-                          child: Text(
-                            'Revenue: \$'+movieDetail.revenue.toString(),
-                          ),
-                        ),
-                      ],
+                    Container(
+                      margin: EdgeInsets.only(left: 20),
+                      child: Text(
+                        'Revenue: \$'+movieDetail.revenue.toString(),
+                      ),
                     ),
                   ],
                 ),
-              )
-            ],
+              ],
+            ),
           )
         ],
       ),]
