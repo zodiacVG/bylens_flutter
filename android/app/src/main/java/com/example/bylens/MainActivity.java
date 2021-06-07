@@ -1,4 +1,4 @@
-package com.example.bylens;
+package com.zodiac.bylens;
 
 import io.flutter.embedding.android.FlutterActivity;
 
